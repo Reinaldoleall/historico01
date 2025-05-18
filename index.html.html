@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - Sistema de Encomendas</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .badge {
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        .badge.orange {
+            background-color: #ff9800;
+        }
+        .badge.green {
+            background-color: #4caf50;
+        }
+        .badge.blue {
+            background-color: #2196f3;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .btn-small {
+            height: 24px;
+            line-height: 24px;
+            padding: 0 8px;
+            margin: 2px;
+        }
+        .modal { max-width: 600px; }
+        .share-modal { max-width: 400px; }
+        .share-options {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .share-option {
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .share-option:hover {
+            background-color: #f5f5f5;
+        }
+        .share-option i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .whatsapp { color: #25D366; }
+        .telegram { color: #0088cc; }
+        .email { color: #D44638; }
+        .others { color: #4285F4; }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <div class="section">
+            <div class="row">
+                <div class="col s12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="row">
+                                <div class="col s12 m6">
+                                    <h5>Histórico de Encomendas</h5>
+                                </div>
+                                <div class="col s12 m6 right-align">
+                                    <a class="waves-effect waves-light btn blue darken-3" id="btnExportarHistorico">
+                                        <i class="material-icons left">picture_as_pdf</i>Exportar Tudo
+                                    </a>
+                                    <a class="waves-effect waves-light btn red darken-1 modal-trigger" href="#modalLimparHistorico">
+                                        <i class="material-icons left">delete</i>Limpar
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Barra de pesquisa -->
+                            <div class="row search-container">
+                                <div class="col s12 m4">
+                                    <div class="input-field">
+                                        <input type="text" id="filtroBloco" placeholder="Filtrar por Bloco">
+                                        <label for="filtroBloco">Bloco</label>
+                                    </div>
+                                </div>
+                                <div class="col s12 m4">
+                                    <div class="input-field">
+                                        <input type="text" id="filtroApto" placeholder="Filtrar por Apartamento">
+                                        <label for="filtroApto">Apartamento</label>
+                                    </div>
+                                </div>
+                                <div class="col s12 m4">
+                                    <a class="waves-effect waves-light btn blue darken-3" id="btnFiltrar">
+                                        <i class="material-icons left">search</i>Filtrar
+                                    </a>
+                                    <a class="waves-effect waves-light btn grey" id="btnLimparFiltro">
+                                        <i class="material-icons left">clear</i>Limpar
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <table class="striped responsive-table">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Bloco/Apto</th>
+                                        <th>Detalhes</th>
+                                        <th>Porteiro</th>
+                                        <th>Retirado por</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaHistorico">
+                                    <tr>
+                                        <td colspan="7" class="center-align grey-text">
+                                            <i class="material-icons large">history</i>
+                                            <p>Carregando histórico...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Confirmação para Limpar Histórico -->
+<!-- Modal de Confirmação para Limpar Histórico -->
+<div id="modalLimparHistorico" class="modal">
+    <div class="modal-content">
+        <h4>Confirmar Exclusão</h4>
+        <p>Tem certeza que deseja remover todas as encomendas já entregues/finalizadas? Esta ação não pode ser desfeita.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-light btn red darken-1" id="btnConfirmarLimparHistorico">Limpar</a>
+    </div>
+</div>
+
+    <!-- Modal de Compartilhamento -->
+    <div id="modalCompartilhar" class="modal share-modal">
+        <div class="modal-content">
+            <h4>Compartilhar Encomenda</h4>
+            <div id="detalhesCompartilhar"></div>
+            
+            <div class="share-options">
+                <div class="share-option whatsapp" onclick="compartilharViaWhatsApp()">
+                    <i class="material-icons">whatsapp</i>
+                    <span>WhatsApp</span>
+                </div>
+                <div class="share-option telegram" onclick="compartilharViaTelegram()">
+                    <i class="material-icons">telegram</i>
+                    <span>Telegram</span>
+                </div>
+                <div class="share-option email" onclick="compartilharViaEmail()">
+                    <i class="material-icons">email</i>
+                    <span>E-mail</span>
+                </div>
+                <div class="share-option others" onclick="compartilharViaOutros()">
+                    <i class="material-icons">share</i>
+                    <span>Outros</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+        </div>
+    </div>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <!-- Adicione este código ANTES do fechamento do </body> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+  apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+  authDomain: "rifas-c414b.firebaseapp.com",
+  databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+  projectId: "rifas-c414b",
+  storageBucket: "rifas-c414b.firebasestorage.app",
+  messagingSenderId: "770195193538",
+  appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+};
+        
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa modais
+            const modals = document.querySelectorAll('.modal');
+            M.Modal.init(modals);
+            
+            // Carrega histórico
+            carregarHistorico();
+            
+            // Configura botões
+            document.getElementById('btnConfirmarLimparHistorico').addEventListener('click', limparHistoricoCompleto);
+            document.getElementById('btnExportarHistorico').addEventListener('click', exportarParaPDF);
+            document.getElementById('btnFiltrar').addEventListener('click', aplicarFiltros);
+            document.getElementById('btnLimparFiltro').addEventListener('click', limparFiltros);
+        });
+
+        let historicoCompleto = [];
+        let pdfAtual = null;
+        let encomendaAtual = null;
+        
+        async function carregarHistorico() {
+            try {
+                // Carrega todas as encomendas (não apenas o histórico)
+                const snapshot = await database.ref('encomendas').once('value');
+                
+                if (!snapshot.exists()) {
+                    document.getElementById('tabelaHistorico').innerHTML = `
+                        <tr>
+                            <td colspan="7" class="center-align grey-text">
+                                <i class="material-icons large">history</i>
+                                <p>Nenhum registro no histórico</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                // Converte para array e processa os dados
+                historicoCompleto = [];
+                snapshot.forEach(child => {
+                    const encomenda = child.val();
+                    historicoCompleto.push({
+                        id: child.key,
+                        data: encomenda.data,
+                        blocoApto: encomenda.blocoApto,
+                        quantidade: encomenda.quantidade,
+                        detalhes: encomenda.descricao || 'Sem detalhes',
+                        porteiroNome: encomenda.registradoPorNome || 'Porteiro',
+                        retiradoPor: encomenda.retiradoPorNome || (encomenda.status === 'retirado' ? 'Morador' : null),
+                        status: encomenda.status,
+                        dataRetirada: encomenda.dataRetirada || null,
+                        porteiroRetirada: encomenda.porteiroRetiradaNome || null
+                    });
+                });
+                
+                // Ordena por data (mais recente primeiro)
+                historicoCompleto.sort((a, b) => b.data - a.data);
+                atualizarTabela(historicoCompleto);
+                
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+                M.toast({html: 'Erro ao carregar histórico', classes: 'red'});
+            }
+        }
+        
+        function atualizarTabela(dados) {
+            const tabelaHistorico = document.getElementById('tabelaHistorico');
+            
+            if (dados.length === 0) {
+                tabelaHistorico.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="center-align grey-text">
+                            <i class="material-icons large">search</i>
+                            <p>Nenhum registro encontrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tabelaHistorico.innerHTML = '';
+            dados.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${formatarData(item.data)}</td>
+                    <td>${item.blocoApto}</td>
+                    <td>
+                        <strong>${item.quantidade} item(s)</strong><br>
+                        ${item.detalhes}
+                    </td>
+                    <td>${item.porteiroNome}</td>
+                    <td>${item.retiradoPor || 'N/A'}</td>
+                    <td>
+                        <span class="badge ${item.status === 'pendente' ? 'orange' : 'green'}">
+                            ${item.status === 'pendente' ? 'Pendente' : 'Retirado'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn-small blue darken-3" onclick="compartilharEncomenda('${item.id}')">
+                            <i class="material-icons tiny">share</i>
+                        </button>
+                        <button class="btn-small green" onclick="exportarItemPDF('${item.id}')">
+                            <i class="material-icons tiny">picture_as_pdf</i>
+                        </button>
+                    </td>
+                `;
+                tabelaHistorico.appendChild(tr);
+            });
+        }
+        
+        function formatarData(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp);
+            return date.toLocaleString('pt-BR');
+        }
+        
+        function aplicarFiltros() {
+            const filtroBloco = document.getElementById('filtroBloco').value.toLowerCase();
+            const filtroApto = document.getElementById('filtroApto').value.toLowerCase();
+            
+            const dadosFiltrados = historicoCompleto.filter(item => {
+                const blocoApto = item.blocoApto.toLowerCase();
+                const blocoMatch = !filtroBloco || blocoApto.includes(filtroBloco.toLowerCase());
+                const aptoMatch = !filtroApto || blocoApto.includes(filtroApto.toLowerCase());
+                return blocoMatch && aptoMatch;
+            });
+            
+            atualizarTabela(dadosFiltrados);
+        }
+        
+        function limparFiltros() {
+            document.getElementById('filtroBloco').value = '';
+            document.getElementById('filtroApto').value = '';
+            atualizarTabela(historicoCompleto);
+        }
+        
+async function limparHistoricoCompleto() {
+    try {
+        // Primeiro, obtemos todas as encomendas
+        const snapshot = await database.ref('encomendas').once('value');
+        
+        if (!snapshot.exists()) {
+            M.toast({html: 'Nenhuma encomenda encontrada', classes: 'green'});
+            return;
+        }
+        
+        // Criamos um array de promessas para deletar as encomendas finalizadas
+        const promises = [];
+        
+        snapshot.forEach(child => {
+            const encomenda = child.val();
+            // Verifica se o status é "entregue" ou "finalizada" (ou qualquer status que você considerar como finalizado)
+            if (encomenda.status === 'retirado' || encomenda.status === 'entregue' || encomenda.status === 'finalizada') {
+                promises.push(database.ref('encomendas/' + child.key).remove());
+            }
+        });
+        
+        // Executa todas as promessas
+        await Promise.all(promises);
+        
+        M.toast({html: 'Encomendas finalizadas removidas com sucesso', classes: 'green'});
+        
+        // Recarrega os dados
+        carregarHistorico();
+        
+        const modal = M.Modal.getInstance(document.getElementById('modalLimparHistorico'));
+        modal.close();
+        
+    } catch (error) {
+        console.error('Erro ao limpar encomendas finalizadas:', error);
+        M.toast({html: 'Erro ao limpar encomendas finalizadas', classes: 'red'});
+    }
+}
+        
+        function compartilharEncomenda(id) {
+            encomendaAtual = historicoCompleto.find(item => item.id === id);
+            if (!encomendaAtual) return;
+            
+            // Gera o PDF primeiro
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(18);
+            doc.text('Detalhes da Encomenda', 105, 15, { align: 'center' });
+            
+            // Data de emissão
+            doc.setFontSize(10);
+            doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 105, 22, { align: 'center' });
+            
+            // Detalhes
+            doc.setFontSize(12);
+            let y = 40;
+            
+            doc.text(`Bloco/Apartamento: ${encomendaAtual.blocoApto}`, 15, y);
+            y += 10;
+            doc.text(`Data do Registro: ${formatarData(encomendaAtual.data)}`, 15, y);
+            y += 10;
+            doc.text(`Quantidade: ${encomendaAtual.quantidade}`, 15, y);
+            y += 10;
+            doc.text(`Registrado por: ${encomendaAtual.porteiroNome}`, 15, y);
+            y += 10;
+            doc.text(`Retirado por: ${encomendaAtual.retiradoPor || 'N/A'}`, 15, y);
+            y += 10;
+            doc.text(`Status: ${encomendaAtual.status === 'pendente' ? 'Pendente' : 'Retirado'}`, 15, y);
+            y += 15;
+            
+            // Detalhes adicionais
+            doc.setFontSize(14);
+            doc.text('Detalhes da Encomenda:', 15, y);
+            y += 10;
+            doc.setFontSize(12);
+            const detalhes = doc.splitTextToSize(encomendaAtual.detalhes || 'Nenhum detalhe adicional fornecido', 180);
+            doc.text(detalhes, 15, y);
+            
+            // Converte para blob
+            const pdfBlob = doc.output('blob');
+            pdfAtual = pdfBlob;
+            
+            // Mostra o modal
+            const modal = M.Modal.getInstance(document.getElementById('modalCompartilhar'));
+            
+            document.getElementById('detalhesCompartilhar').innerHTML = `
+                <p><strong>Bloco/Apto:</strong> ${encomendaAtual.blocoApto}</p>
+                <p><strong>Data:</strong> ${formatarData(encomendaAtual.data)}</p>
+                <p><strong>Quantidade:</strong> ${encomendaAtual.quantidade}</p>
+                <p><strong>Detalhes:</strong> ${encomendaAtual.detalhes}</p>
+            `;
+            
+            modal.open();
+        }
+
+        // Funções de compartilhamento
+        function compartilharViaWhatsApp() {
+            if (!encomendaAtual) return;
+            
+            const text = `Detalhes da encomenda para ${encomendaAtual.blocoApto}:\n` +
+                         `Data: ${formatarData(encomendaAtual.data)}\n` +
+                         `Quantidade: ${encomendaAtual.quantidade}\n` +
+                         `Detalhes: ${encomendaAtual.detalhes}`;
+            
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function compartilharViaTelegram() {
+            if (!encomendaAtual) return;
+            
+            const text = `Detalhes da encomenda para ${encomendaAtual.blocoApto}:\n` +
+                         `Data: ${formatarData(encomendaAtual.data)}\n` +
+                         `Quantidade: ${encomendaAtual.quantidade}\n` +
+                         `Detalhes: ${encomendaAtual.detalhes}`;
+            
+            const url = `https://t.me/share/url?url=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function compartilharViaEmail() {
+            if (!encomendaAtual) return;
+            
+            const subject = `Encomenda para ${encomendaAtual.blocoApto}`;
+            const body = `Detalhes da encomenda:\n\n` +
+                         `Bloco/Apartamento: ${encomendaAtual.blocoApto}\n` +
+                         `Data: ${formatarData(encomendaAtual.data)}\n` +
+                         `Quantidade: ${encomendaAtual.quantidade}\n` +
+                         `Detalhes: ${encomendaAtual.detalhes}`;
+            
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function compartilharViaOutros() {
+            if (!pdfAtual) return;
+            
+            // Cria um link temporário para o PDF
+            const pdfUrl = URL.createObjectURL(pdfAtual);
+            const fileName = `Encomenda_${encomendaAtual.blocoApto}.pdf`;
+            
+            // Cria um link <a> temporário para download
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            // Libera o objeto URL
+            setTimeout(() => URL.revokeObjectURL(pdfUrl), 100);
+        }
+        
+        function exportarItemPDF(id) {
+            const encomenda = historicoCompleto.find(item => item.id === id);
+            if (!encomenda) return;
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(18);
+            doc.text('Detalhes da Encomenda', 105, 15, { align: 'center' });
+            
+            // Data de emissão
+            doc.setFontSize(10);
+            doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 105, 22, { align: 'center' });
+            
+            // Detalhes
+            doc.setFontSize(12);
+            let y = 40;
+            
+            doc.text(`Bloco/Apartamento: ${encomenda.blocoApto}`, 15, y);
+            y += 10;
+            doc.text(`Data do Registro: ${formatarData(encomenda.data)}`, 15, y);
+            y += 10;
+            doc.text(`Quantidade: ${encomenda.quantidade}`, 15, y);
+            y += 10;
+            doc.text(`Registrado por: ${encomenda.porteiroNome}`, 15, y);
+            y += 10;
+            doc.text(`Retirado por: ${encomenda.retiradoPor || 'N/A'}`, 15, y);
+            y += 10;
+            doc.text(`Status: ${encomenda.status === 'pendente' ? 'Pendente' : 'Retirado'}`, 15, y);
+            y += 15;
+            
+            // Detalhes adicionais
+            doc.setFontSize(14);
+            doc.text('Detalhes da Encomenda:', 15, y);
+            y += 10;
+            doc.setFontSize(12);
+            const detalhes = doc.splitTextToSize(encomenda.detalhes || 'Nenhum detalhe adicional fornecido', 180);
+            doc.text(detalhes, 15, y);
+            
+            // Salva o PDF
+            doc.save(`encomenda_${encomenda.blocoApto}_${encomenda.id}.pdf`);
+            M.toast({html: 'PDF gerado com sucesso', classes: 'green'});
+        }
+        
+        async function exportarParaPDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Título
+                doc.setFontSize(18);
+                doc.text('Histórico Completo de Encomendas', 105, 15, { align: 'center' });
+                
+                // Data de emissão
+                doc.setFontSize(10);
+                doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 105, 22, { align: 'center' });
+                
+                // Filtros aplicados
+                const filtroBloco = document.getElementById('filtroBloco').value;
+                const filtroApto = document.getElementById('filtroApto').value;
+                
+                if (filtroBloco || filtroApto) {
+                    doc.setFontSize(10);
+                    doc.text(`Filtros aplicados: ${filtroBloco ? 'Bloco: ' + filtroBloco : ''} ${filtroApto ? 'Apto: ' + filtroApto : ''}`, 
+                            105, 30, { align: 'center' });
+                }
+                
+                // Cabeçalho da tabela
+                const headers = [
+                    ['Data', 'Bloco/Apto', 'Quantidade', 'Porteiro', 'Retirado por', 'Status']
+                ];
+                
+                // Dados da tabela
+                const dados = historicoCompleto
+                    .filter(item => {
+                        const blocoApto = item.blocoApto.toLowerCase();
+                        const blocoMatch = !filtroBloco || blocoApto.includes(filtroBloco.toLowerCase());
+                        const aptoMatch = !filtroApto || blocoApto.includes(filtroApto.toLowerCase());
+                        return blocoMatch && aptoMatch;
+                    })
+                    .map(item => [
+                        formatarData(item.data),
+                        item.blocoApto,
+                        item.quantidade.toString(),
+                        item.porteiroNome,
+                        item.retiradoPor || 'N/A',
+                        item.status === 'pendente' ? 'Pendente' : 'Retirado'
+                    ]);
+                
+                // Configurações da tabela
+                const tableConfig = {
+                    startY: 40,
+                    head: headers,
+                    body: dados,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [21, 101, 192],
+                        textColor: 255,
+                        fontStyle: 'bold'
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    margin: { top: 40 }
+                };
+                
+                // Adiciona a tabela
+                doc.autoTable(tableConfig);
+                
+                // Salva o PDF
+                doc.save('historico_encomendas.pdf');
+                M.toast({html: 'PDF gerado com sucesso', classes: 'green'});
+                
+            } catch (error) {
+                console.error('Erro ao exportar para PDF:', error);
+                M.toast({html: 'Erro ao gerar PDF', classes: 'red'});
+            }
+        }
+        
+        // Função para gerar e baixar PDF
+function generateAndDownloadPDF() {
+    // Sua lógica de geração de PDF aqui
+    const pdfUrl = 'data:application/pdf;base64,...'; // ou URL do PDF
+    
+    // Trigger download
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'documento.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Função para compartilhar
+function sharePDF(filePath) {
+    if(typeof Android !== 'undefined') {
+        Android.shareFile(filePath);
+    } else {
+        alert('Função disponível apenas no app');
+    }
+}
+    </script>
+</body>
+</html>

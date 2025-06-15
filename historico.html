@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - Sistema de Encomendas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="css/historico.css">
+   
+</head>
+<body>
+    <main class="container">
+        <div class="card">
+            <div class="card-content">
+                <div class="row" style="align-items: center; margin-bottom: var(--md-sys-spacing-medium);">
+                    <div class="col">
+                        <h1 class="card-title">Histórico de Encomendas</h1>
+                    </div>
+                    <div class="col" style="text-align: right;">
+                        <button id="btnExportarHistorico" class="btn">
+                            <i class="material-icons">picture_as_pdf</i>
+                            <span>Exportar Tudo</span>
+                        </button>
+                        <button id="btnLimparHistorico" class="btn btn-danger">
+                            <i class="material-icons">delete</i>
+                            <span>Limpar</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Barra de pesquisa -->
+                <div class="row" style="margin-bottom: var(--md-sys-spacing-medium);">
+                    <div class="col">
+                        <div class="input-field">
+                            <input type="text" id="filtroBloco" placeholder=" ">
+                            <label for="filtroBloco">Bloco</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-field">
+                            <input type="text" id="filtroApto" placeholder=" ">
+                            <label for="filtroApto">Apartamento</label>
+                        </div>
+                    </div>
+                    <div class="col" style="display: flex; align-items: flex-end; gap: var(--md-sys-spacing-small);">
+                        <button id="btnFiltrar" class="btn">
+                            <i class="material-icons">search</i>
+                            <span>Filtrar</span>
+                        </button>
+                        <button id="btnLimparFiltro" class="btn btn-outlined">
+                            <i class="material-icons">clear</i>
+                            <span>Limpar</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Bloco/Apto</th>
+                            <th>Detalhes</th>
+                            <th>Porteiro</th>
+                            <th>Retirado por</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaHistorico">
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="material-icons">history</i>
+                                    <p>Carregando histórico...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Confirmação para Limpar Histórico -->
+    <div id="modalLimparHistorico" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirmar Exclusão</h2>
+            </div>
+            <div class="modal-content">
+                <p>Tem certeza que deseja remover todas as encomendas já entregues/finalizadas? Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-text modal-close">Cancelar</button>
+                <button id="btnConfirmarLimparHistorico" class="btn btn-danger">Limpar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Compartilhamento -->
+    <div id="modalCompartilhar" class="modal-overlay">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Compartilhar Encomenda</h2>
+            </div>
+            <div class="modal-content">
+                <div id="detalhesCompartilhar"></div>
+                
+                <div class="share-options">
+                    <div class="share-option whatsapp" onclick="compartilharViaWhatsApp()" tabindex="0" role="button" aria-label="Compartilhar via WhatsApp">
+                        <i class="material-icons">whatsapp</i>
+                        <span>WhatsApp</span>
+                    </div>
+                    <div class="share-option telegram" onclick="compartilharViaTelegram()" tabindex="0" role="button" aria-label="Compartilhar via Telegram">
+                        <i class="material-icons">telegram</i>
+                        <span>Telegram</span>
+                    </div>
+                    <div class="share-option email" onclick="compartilharViaEmail()" tabindex="0" role="button" aria-label="Compartilhar via E-mail">
+                        <i class="material-icons">email</i>
+                        <span>E-mail</span>
+                    </div>
+                    <div class="share-option others" onclick="compartilharViaOutros()" tabindex="0" role="button" aria-label="Outras opções de compartilhamento">
+                        <i class="material-icons">share</i>
+                        <span>Outros</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-text modal-close">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="js/historico.js"></script>
+</body>
+</html>

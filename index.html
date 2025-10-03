@@ -2,1107 +2,716 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1280">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico - Sistema de Encomendas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
-
-   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <style>
-  /* ==========================================================================
-   MATERIAL DESIGN 3 - PÁGINA DE HISTÓRICO (VERSÃO CORRIGIDA DO CARROSSEL)
+/* ==========================================================================
+   ESTILO VISUAL REFINADO E MODERNO
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   0. TOKENS E CONFIGURAÇÕES GLOBAIS (VARIÁVEIS)
+   0. VARIÁVEIS E CONFIGURAÇÕES GLOBAIS
    -------------------------------------------------------------------------- */
 :root {
-    /* Paleta de Cores Primárias (Roxo/Azul) */
-    --md-sys-color-primary: #6750A4;
-    --md-sys-color-on-primary: #FFFFFF;
-    --md-sys-color-primary-container: #EADDFF;
-    --md-sys-color-on-primary-container: #21005D;
-
-    /* Paleta de Cores Secundárias (Cinza) */
-    --md-sys-color-secondary: #625B71;
-    --md-sys-color-on-secondary: #FFFFFF;
-    --md-sys-color-secondary-container: #E8DEF8;
-    --md-sys-color-on-secondary-container: #1D192B;
-
-    /* Paleta de Cores de Erro (Vermelho) */
-    --md-sys-color-error: #B3261E;
-    --md-sys-color-on-error: #FFFFFF;
-    --md-sys-color-error-container: #F9DEDC;
-    --md-sys-color-on-error-container: #410E0B;
-
-    /* Cores de Superfície e Fundo */
-    --md-sys-color-background: #FFFBFE;
-    --md-sys-color-on-background: #1C1B1F;
-    --md-sys-color-surface: #FFFBFE;
-    --md-sys-color-on-surface: #1C1B1F;
-    --md-sys-color-surface-variant: #E7E0EC;
-    --md-sys-color-on-surface-variant: #49454F;
-    --md-sys-color-outline: #79747E;
-    --md-sys-color-outline-variant: #CAC4D0;
-
-    /* Cores de Elevação (Sombra) e Scrim (Overlay) */
-    --md-sys-color-shadow: #000000;
-    --md-sys-color-scrim: #000000;
-
+    /* Paleta de Cores Refinada */
+    --color-primary: #4f46e5;
+    --color-primary-light: #e0e7ff; /* Um pouco mais sutil */
+    --color-danger: #ef4444;
+    --color-danger-light: #fee2e2;
+    --color-success: #22c55e;
+    
+    /* Cores de UI com mais profundidade */
+    --color-bg: #f7f8fc; /* Fundo com um tom azulado leve */
+    --color-surface: #ffffff;
+    --color-border: #e5e7eb; /* Borda mais suave */
+    --color-text-primary: #111827;
+    --color-text-secondary: #6b7280;
+    
     /* Tipografia */
-    --md-ref-typeface-brand: 'Roboto', sans-serif;
-    --md-sys-typescale-headline-small-font: var(--md-ref-typeface-brand);
-    --md-sys-typescale-headline-small-size: 24px;
-    --md-sys-typescale-headline-small-weight: 400;
-
-    --md-sys-typescale-title-large-font: var(--md-ref-typeface-brand);
-    --md-sys-typescale-title-large-size: 22px;
-    --md-sys-typescale-title-large-weight: 500;
+    --font-family: 'Inter', -apple-system, BlinkMacSystem-Font, "Segoe UI", Roboto, sans-serif;
     
-    --md-sys-typescale-label-large-font: var(--md-ref-typeface-brand);
-    --md-sys-typescale-label-large-size: 14px;
-    --md-sys-typescale-label-large-weight: 500;
-
-    --md-sys-typescale-body-medium-font: var(--md-ref-typeface-brand);
-    --md-sys-typescale-body-medium-size: 14px;
-    --md-sys-typescale-body-medium-weight: 400;
-    
-    /* Formas (Arredondamento) */
-    --md-sys-shape-corner-small: 4px;
-    --md-sys-shape-corner-medium: 8px;
-    --md-sys-shape-corner-large: 16px;
-    --md-sys-shape-corner-extra-large: 28px;
-    --md-sys-shape-corner-full: 9999px;
-
-    /* Espaçamento */
-    --md-sys-spacing-small: 8px;
-    --md-sys-spacing-medium: 16px;
-    --md-sys-spacing-large: 24px;
+    /* Layout e Efeitos */
+    --border-radius-md: 0.5rem;  /* 8px */
+    --border-radius-lg: 1rem;   /* 16px */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --------------------------------------------------------------------------
-   1. ESTILOS DE BASE E RESET
+   1. ESTILOS DE BASE E ANIMAÇÕES
    -------------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-tap-highlight-color: transparent; }
+html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
 body {
-    font-family: var(--md-ref-typeface-brand);
-    background-color: var(--md-sys-color-background);
-    color: var(--md-sys-color-on-background);
-    line-height: 1.5;
+    font-family: var(--font-family);
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --------------------------------------------------------------------------
+   2. LAYOUT E COMPONENTES PRINCIPAIS
+   -------------------------------------------------------------------------- */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    animation: fadeIn 0.5s var(--transition-slow) both;
 }
 
-/* --------------------------------------------------------------------------
-   2. LAYOUT E GRID
-   -------------------------------------------------------------------------- */
-.container { width: 100%; max-width: 1400px; margin: 0 auto; padding: var(--md-sys-spacing-medium); }
-.row { display: flex; flex-wrap: wrap; gap: var(--md-sys-spacing-medium); }
-.col { flex: 1; min-width: 250px; }
-
-/* --------------------------------------------------------------------------
-   3. COMPONENTES
-   -------------------------------------------------------------------------- */
-
-/* ----- CARD ----- */
 .card {
-    background-color: var(--md-sys-color-surface);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    margin-top: var(--md-sys-spacing-large);
-    box-shadow: 0 1px 2px rgba(var(--md-sys-color-shadow), 0.05);
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: box-shadow var(--transition-slow);
 }
-.card-content { padding: var(--md-sys-spacing-large); }
-.card-title {
-    font-family: var(--md-sys-typescale-headline-small-font);
-    font-size: var(--md-sys-typescale-headline-small-size);
-    font-weight: var(--md-sys-typescale-headline-small-weight);
-    color: var(--md-sys-color-on-surface);
+.card:hover {
+    box-shadow: var(--shadow-lg);
 }
 
-/* ----- BOTÕES (BUTTONS) ----- */
+.card-content {
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    align-items: end;
+    margin-bottom: 2rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. COMPONENTES DE UI
+   -------------------------------------------------------------------------- */
+
+/* ----- Botões ----- */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--md-sys-spacing-small);
-    height: 40px;
-    padding: 0 24px;
-    border: 1px solid transparent;
-    border-radius: var(--md-sys-shape-corner-full);
-    font-family: var(--md-sys-typescale-label-large-font);
-    font-size: var(--md-sys-typescale-label-large-size);
-    font-weight: var(--md-sys-typescale-label-large-weight);
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 150ms, box-shadow 150ms;
-}
-.btn .material-icons { font-size: 18px; }
-
-/* Filled Button (Padrão) */
-.btn {
-    background-color: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
-}
-.btn:hover { box-shadow: 0 1px 3px 1px rgba(var(--md-sys-color-shadow), 0.15); }
-.btn:disabled { background-color: rgba(var(--md-sys-color-on-surface), 0.12); color: rgba(var(--md-sys-color-on-surface), 0.38); }
-
-/* Danger Button */
-.btn.btn-danger {
-    background-color: var(--md-sys-color-error);
-    color: var(--md-sys-color-on-error);
-}
-
-/* Outlined Button */
-.btn.btn-outlined {
-    background-color: transparent;
-    color: var(--md-sys-color-primary);
-    border-color: var(--md-sys-color-outline);
-}
-.btn.btn-outlined:hover { background-color: rgba(var(--md-sys-color-primary), 0.08); }
-
-/* Text Button */
-.btn.btn-text {
-    background-color: transparent;
-    color: var(--md-sys-color-primary);
-    border-color: transparent;
-    padding: 0 var(--md-sys-spacing-medium);
-}
-.btn.btn-text:hover { background-color: rgba(var(--md-sys-color-primary), 0.08); }
-.btn-text.btn-danger { color: var(--md-sys-color-error); }
-.btn-text.btn-danger:hover { background-color: rgba(var(--md-sys-color-error), 0.08); }
-
-
-/* ----- INPUT FIELDS ----- */
-.input-field {
-    position: relative;
-    background-color: var(--md-sys-color-surface-variant);
-    border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
-    padding-top: var(--md-sys-spacing-small);
-    height: 56px;
-}
-.input-field input {
-    width: 100%;
-    height: 100%;
+    gap: 0.5rem;
+    height: 44px;
+    padding: 0 1.5rem;
     border: none;
-    border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
-    padding: var(--md-sys-spacing-medium) var(--md-sys-spacing-medium) 0;
+    border-radius: var(--border-radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn:active { transform: translateY(-1px); }
+.btn .material-icons-outlined { font-size: 1.25rem; }
+
+.btn-primary { background-color: var(--color-primary); color: white; }
+.btn-danger { background-color: var(--color-danger); color: white; }
+.btn-primary:hover, .btn-danger:hover { filter: brightness(1.1); }
+
+.btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text-secondary);
+    box-shadow: inset 0 0 0 1px var(--color-border);
+}
+.btn-secondary:hover {
+    color: var(--color-primary);
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.btn-text {
     background-color: transparent;
-    outline: none;
-    font-size: 16px;
-    color: var(--md-sys-color-on-surface);
+    color: var(--color-text-secondary);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
 }
-.input-field label {
-    position: absolute;
-    left: var(--md-sys-spacing-medium);
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--md-sys-color-on-surface-variant);
-    pointer-events: none;
-    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+.btn-text:hover { color: var(--color-primary); background-color: var(--color-primary-light); }
+
+/* ----- Campos de Input ----- */
+.input-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
 }
-.input-field input::placeholder { color: transparent; }
-.input-field input:focus + label,
-.input-field input:not(:placeholder-shown) + label {
-    top: 10px;
-    transform: translateY(0);
-    font-size: 12px;
-    color: var(--md-sys-color-primary);
-}
-.input-field::after { /* Linha de foco */
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
+.input-group input {
     width: 100%;
-    height: 2px;
-    background-color: var(--md-sys-color-primary);
-    transform: scaleX(0);
-    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    height: 44px;
+    padding: 0 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-bg);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
 }
-.input-field input:focus ~ ::after { transform: scaleX(1); }
+.input-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
 
-/* ----- DIVIDER ----- */
-.divider { height: 1px; background-color: var(--md-sys-color-outline-variant); margin: var(--md-sys-spacing-large) 0; }
-
-/* ----- TABELA (Desktop) ----- */
+/* ----- Melhorias na Tabela ----- */
+.table-wrapper {
+    overflow: hidden; /* Garante que os cantos arredondados da tabela funcionem */
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+}
 .table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 0.875rem;
 }
 .table th, .table td {
-    padding: var(--md-sys-spacing-medium);
+    padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid var(--md-sys-color-outline-variant);
-}
-.table th {
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
-    font-size: var(--md-sys-typescale-label-large-size);
-}
-.table tbody tr:hover { background-color: rgba(var(--md-sys-color-primary), 0.04); }
-.table-actions { display: flex; gap: var(--md-sys-spacing-small); }
-.table .badge {
-    padding: 2px 8px;
-    border-radius: var(--md-sys-shape-corner-full);
-    font-weight: 500;
-    font-size: 12px;
-}
-.table .badge.primary { background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
-.table .badge.error { background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
-
-/* ----- TABELA RESPONSIVA (Carrossel Horizontal) ----- */
-@media (max-width: 900px) {
-    /* CORREÇÃO: Força a tabela a se comportar como um bloco para controlar sua largura */
-    .table {
-        display: block;
-        width: 100%;
-    }
-    
-    .table thead { 
-        display: none;
-    }
-
-    .table tbody {
-        display: flex; /* Cria a linha para o carrossel */
-        overflow-x: auto; /* Habilita a rolagem horizontal */
-        gap: var(--md-sys-spacing-medium);
-        padding: 4px 0 var(--md-sys-spacing-medium); /* Adiciona um respiro embaixo para a sombra */
-        margin: 0;
-        scroll-snap-type: x mandatory; /* Efeito de "snap" na rolagem */
-        
-        /* Esconde a barra de rolagem visualmente */
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    .table tbody::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Cada TR vira um "card" no carrossel */
-    .table tr {
-        flex: 0 0 90%; /* CORREÇÃO: Define o tamanho de cada card */
-        max-width: 350px; /* CORREÇÃO: Limite máximo para o tamanho do card */
-        display: block;
-        border: 1px solid var(--md-sys-color-outline-variant);
-        border-radius: var(--md-sys-shape-corner-large);
-        scroll-snap-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        overflow: hidden; /* Garante que o conteúdo não vaze das bordas arredondadas */
-    }
-    
-    .table td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: right;
-        padding: 12px var(--md-sys-spacing-medium);
-        border-bottom: 1px solid var(--md-sys-color-outline-variant);
-        background-color: var(--md-sys-color-surface);
-    }
-    .table tr td:last-child {
-        border-bottom: none;
-    }
-    
-    .table td::before {
-        content: attr(data-label);
-        font-weight: 500;
-        text-align: left;
-        color: var(--md-sys-color-on-surface-variant);
-        padding-right: 8px;
-    }
-}
-
-
-/* ----- ESTADO VAZIO / CARREGANDO ----- */
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 24px;
-    text-align: center;
-    color: var(--md-sys-color-on-surface-variant);
-}
-.empty-state .material-icons { font-size: 48px; margin-bottom: var(--md-sys-spacing-medium); }
-
-.loading {
-    width: 24px;
-    height: 24px;
-    border: 3px solid var(--md-sys-color-surface-variant);
-    border-top-color: var(--md-sys-color-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    display: inline-block;
     vertical-align: middle;
+    border-bottom: 1px solid var(--color-border);
 }
-.btn .loading { width: 18px; height: 18px; border-width: 2px; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.table thead th {
+    background-color: var(--color-bg);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+.table tbody tr {
+    transition: background-color var(--transition-fast);
+}
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+.table tbody tr:nth-of-type(odd) {
+    background-color: #fcfdff; /* Cor de fundo alternada sutil */
+}
+.table tbody tr:hover {
+    background-color: var(--color-primary-light);
+}
+.table-actions {
+    display: flex;
+    justify-content: flex-end;
+}
 
-/* ----- MODAL (DIALOG) ----- */
+/* ----- Badge de Status ----- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+.badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.status-retirado { color: #1e40af; background-color: #dbeafe; }
+.status-retirado::before { background-color: #2563eb; }
+.status-pendente { color: #9a3412; background-color: #ffedd5; }
+.status-pendente::before { background-color: #f97316; }
+
+/* ----- Modal ----- */
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(var(--md-sys-color-scrim), 0.4);
+    inset: 0;
+    background-color: rgb(15 23 42 / 0.6);
+    backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 200ms ease-in-out;
+    transition: opacity var(--transition-fast);
 }
 .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
 .modal {
-    background-color: var(--md-sys-color-surface);
-    border-radius: var(--md-sys-shape-corner-extra-large);
-    padding: var(--md-sys-spacing-large);
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
     width: 90%;
-    max-width: 560px;
-    box-shadow: 0 4px 8px 3px rgba(var(--md-sys-color-shadow), 0.15);
-    transform: scale(0.95);
-    transition: transform 200ms ease-in-out;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.95) translateY(10px);
+    transition: transform var(--transition-slow);
 }
-.modal-overlay.active .modal { transform: scale(1); }
-
-.modal-header { margin-bottom: var(--md-sys-spacing-medium); }
-.modal-title { font-family: var(--md-sys-typescale-headline-small-font); font-size: var(--md-sys-typescale-headline-small-size); }
-.modal-content p, #detalhesCompartilhar p { margin-bottom: var(--md-sys-spacing-small); }
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--md-sys-spacing-small);
-    margin-top: var(--md-sys-spacing-large);
-}
-
-/* ----- MODAL DE COMPARTILHAMENTO ----- */
-.share-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--md-sys-spacing-medium);
-    margin-top: var(--md-sys-spacing-large);
-}
+.modal-overlay.active .modal { transform: scale(1) translateY(0); }
+.modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; }
+.modal-content { color: var(--color-text-secondary); margin-bottom: 2rem; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; }
+.share-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .share-option {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: var(--md-sys-spacing-small);
-    padding: var(--md-sys-spacing-medium);
-    border-radius: var(--md-sys-shape-corner-large);
-    background-color: var(--md-sys-color-surface-variant);
-    color: var(--md-sys-color-on-surface-variant);
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 150ms;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    font-weight: 500;
 }
-.share-option:hover { background-color: var(--md-sys-color-secondary-container); }
-.share-option i { font-size: 32px; }
-.share-option.whatsapp:hover { color: #25D366; }
-.share-option.telegram:hover { color: #0088cc; }
-.share-option.email:hover { color: var(--md-sys-color-primary); }
+.share-option:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.03);
+}
 
-/* ----- TOAST (SNACKBAR) ----- */
+/* ----- Toast/Snackbar ----- */
 .toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 1.5rem;
     left: 50%;
-    transform: translate(-50%, 100px);
-    background-color: #323232; /* Cor padrão do snackbar MD */
-    color: #FFFFFF;
-    padding: 14px 24px;
-    border-radius: var(--md-sys-shape-corner-small);
-    font-size: var(--md-sys-typescale-body-medium-size);
+    transform: translate(-50%, 150%);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-lg);
     z-index: 2000;
-    box-shadow: 0 4px 8px 3px rgba(var(--md-sys-color-shadow), 0.15);
-    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform var(--transition-slow);
+    pointer-events: none;
+    font-weight: 500;
 }
 .toast.show { transform: translate(-50%, 0); }
+.toast.success { background-color: var(--color-success); }
+.toast.error { background-color: var(--color-danger); }
+.toast.info { background-color: var(--color-text-primary); }
 
+/* ----- Estados Vazios/Carregando ----- */
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.empty-state {
+    padding: 4rem 1rem;
+    text-align: center;
+    color: var(--color-text-secondary);
+}
+.empty-state .material-icons-outlined {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #cbd5e1;
+    animation: bob 3s ease-in-out infinite;
+}
+.empty-state p { font-size: 1.125rem; }
+.loading {
+    width: 24px;
+    height: 24px;
+    border: 3px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
+/* --------------------------------------------------------------------------
+   4. RESPONSIVIDADE
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .container { padding: 1.5rem 1rem; }
+    .card-content { padding: 1rem; }
+    .page-title { font-size: 1.5rem; }
+    
+    .table-wrapper { border: none; }
+    .table thead { display: none; }
+    .table tr {
+        display: block;
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius-md);
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow-sm);
+    }
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        padding: 0.75rem 1rem;
+    }
+    .table tr td:last-child { border-bottom: none; }
+    .table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        color: var(--color-text-secondary);
+        margin-right: 1rem;
+    }
+    .table-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
 </style>
 <body>
     <main class="container">
         <div class="card">
             <div class="card-content">
-                <div class="row" style="align-items: center; margin-bottom: var(--md-sys-spacing-medium);">
-                    <div class="col">
-                        <h1 class="card-title">Histórico de Encomendas</h1>
-                    </div>
-                    <div class="col" style="text-align: right;">
-                        <button id="btnExportarHistorico" class="btn">
-                            <i class="material-icons">picture_as_pdf</i>
-                            <span>Exportar Tudo</span>
+                <div class="page-header">
+                    <h1 class="page-title">Histórico de Encomendas</h1>
+                    <div class="actions-group">
+                        <button id="btnExportarHistorico" class="btn btn-secondary" style="display: none;">
+                            <span class="material-icons-outlined">download</span>
+                            <span>Exportar</span>
                         </button>
                         <button id="btnLimparHistorico" class="btn btn-danger">
-                            <i class="material-icons">delete</i>
-                            <span>Limpar</span>
+                            <span class="material-icons-outlined">delete_sweep</span>
+                            <span>Limpar Entregues</span>
                         </button>
                     </div>
                 </div>
-                
-                <!-- Barra de pesquisa -->
-                <div class="row" style="margin-bottom: var(--md-sys-spacing-medium);">
-                    <div class="col">
-                        <div class="input-field">
-                            <input type="text" id="filtroBloco" placeholder=" ">
-                            <label for="filtroBloco">Bloco</label>
-                        </div>
+
+                <form id="filterForm" class="filter-grid">
+                    <div class="input-group">
+                        <label for="filtroBloco">Filtrar por Bloco</label>
+                        <input type="text" id="filtroBloco" placeholder="Ex: A">
                     </div>
-                    <div class="col">
-                        <div class="input-field">
-                            <input type="text" id="filtroApto" placeholder=" ">
-                            <label for="filtroApto">Apartamento</label>
-                        </div>
+                    <div class="input-group">
+                        <label for="filtroApto">Filtrar por Apartamento</label>
+                        <input type="text" id="filtroApto" placeholder="Ex: 101">
                     </div>
-                    <div class="col" style="display: flex; align-items: flex-end; gap: var(--md-sys-spacing-small);">
-                        <button id="btnFiltrar" class="btn">
-                            <i class="material-icons">search</i>
+                    <div class="actions-group">
+                        <button id="btnFiltrar" type="submit" class="btn btn-primary">
+                            <span class="material-icons-outlined">search</span>
                             <span>Filtrar</span>
                         </button>
-                        <button id="btnLimparFiltro" class="btn btn-outlined">
-                            <i class="material-icons">clear</i>
-                            <span>Limpar</span>
+                        <button id="btnLimparFiltro" type="reset" class="btn btn-secondary">
+                            <span class="material-icons-outlined">clear</span>
                         </button>
                     </div>
+                </form>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Bloco/Apto</th>
+                                <th>Detalhes</th>
+                                <th>Porteiro</th>
+                                <th>Retirado por</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaHistorico">
+                            </tbody>
+                    </table>
                 </div>
-                
-                <div class="divider"></div>
-                
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Bloco/Apto</th>
-                            <th>Detalhes</th>
-                            <th>Porteiro</th>
-                            <th>Retirado por</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaHistorico">
-                        <tr>
-                            <td colspan="7">
-                                <div class="empty-state">
-                                    <i class="material-icons">history</i>
-                                    <p>Carregando histórico...</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </main>
 
-    <!-- Modal de Confirmação para Limpar Histórico -->
     <div id="modalLimparHistorico" class="modal-overlay">
         <div class="modal">
-            <div class="modal-header">
-                <h2 class="modal-title">Confirmar Exclusão</h2>
-            </div>
-            <div class="modal-content">
-                <p>Tem certeza que deseja remover todas as encomendas já entregues/finalizadas? Esta ação não pode ser desfeita.</p>
-            </div>
+            <h2 class="modal-title">Confirmar Limpeza</h2>
+            <p class="modal-content">
+                Tem certeza que deseja remover <strong>todas as encomendas já entregues</strong>? Esta ação não pode ser desfeita.
+            </p>
             <div class="modal-footer">
-                <button class="btn btn-text modal-close">Cancelar</button>
-                <button id="btnConfirmarLimparHistorico" class="btn btn-danger">Limpar</button>
+                <button class="btn btn-secondary modal-close">Cancelar</button>
+                <button id="btnConfirmarLimparHistorico" class="btn btn-danger">Sim, Limpar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Compartilhamento -->
     <div id="modalCompartilhar" class="modal-overlay">
-        <div class="modal" style="max-width: 400px;">
-            <div class="modal-header">
-                <h2 class="modal-title">Compartilhar Encomenda</h2>
-            </div>
+        <div class="modal">
+            <h2 class="modal-title">Compartilhar Encomenda</h2>
             <div class="modal-content">
-                <div id="detalhesCompartilhar"></div>
-                
+                <div id="detalhesCompartilhar" style="margin-bottom: 1.5rem; padding: 1rem; background-color: var(--color-bg); border-radius: var(--border-radius-md);"></div>
                 <div class="share-options">
-                    <div class="share-option whatsapp" onclick="compartilharViaWhatsApp()" tabindex="0" role="button" aria-label="Compartilhar via WhatsApp">
-                        <i class="material-icons">whatsapp</i>
-                        <span>WhatsApp</span>
-                    </div>
-                    <div class="share-option telegram" onclick="compartilharViaTelegram()" tabindex="0" role="button" aria-label="Compartilhar via Telegram">
-                        <i class="material-icons">telegram</i>
-                        <span>Telegram</span>
-                    </div>
-                    <div class="share-option email" onclick="compartilharViaEmail()" tabindex="0" role="button" aria-label="Compartilhar via E-mail">
-                        <i class="material-icons">email</i>
-                        <span>E-mail</span>
-                    </div>
-                    <div class="share-option others" onclick="compartilharViaOutros()" tabindex="0" role="button" aria-label="Outras opções de compartilhamento">
-                        <i class="material-icons">share</i>
-                        <span>Outros</span>
-                    </div>
+                    <button class="btn share-option" data-share="whatsapp"><span class="material-icons-outlined">whatsapp</span> WhatsApp</button>
+                    <button class="btn share-option" data-share="email"><span class="material-icons-outlined">email</span> E-mail</button>
+                    <button class="btn share-option" data-share="copy"><span class="material-icons-outlined">content_copy</span> Copiar</button>
+                    <button class="btn share-option" data-share="pdf"><span class="material-icons-outlined">picture_as_pdf</span> PDF</button>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-text modal-close">Fechar</button>
+                <button class="btn btn-secondary modal-close">Fechar</button>
             </div>
         </div>
     </div>
-    
-    <!-- Toast -->
-    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <div id="toast" class="toast"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
     <script>
-       // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
-            authDomain: "rifas-c414b.firebaseapp.com",
-            databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
-            projectId: "rifas-c414b",
-            storageBucket: "rifas-c414b.firebasestorage.app",
-            messagingSenderId: "770195193538",
-            appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
-        };
-        
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Configura modais
-            setupModals();
-            
-            // Carrega histórico
-            carregarHistorico();
-            
-            // Configura botões
-            document.getElementById('btnExportarHistorico').addEventListener('click', exportarParaPDF);
-            document.getElementById('btnLimparHistorico').addEventListener('click', () => toggleModal('modalLimparHistorico', true));
-            document.getElementById('btnConfirmarLimparHistorico').addEventListener('click', limparHistoricoCompleto);
-            document.getElementById('btnFiltrar').addEventListener('click', aplicarFiltros);
-            document.getElementById('btnLimparFiltro').addEventListener('click', limparFiltros);
-            
-            // Configura acessibilidade
-            setupAccessibility();
-        });
-
-        let historicoCompleto = [];
-        let pdfAtual = null;
-        let encomendaAtual = null;
-        
-        function setupModals() {
-            // Fechar modais ao clicar no overlay
-            document.querySelectorAll('.modal-overlay').forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        toggleModal(this.id, false);
+    // SEU JAVASCRIPT COM MELHORIAS DE FEEDBACK
+    const App = {
+        state: {
+            firebaseConfig: {
+                apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+                authDomain: "rifas-c414b.firebaseapp.com",
+                databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+                projectId: "rifas-c414b",
+                storageBucket: "rifas-c414b.firebasestorage.app",
+                messagingSenderId: "770195193538",
+                appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+            },
+            database: null,
+            historicoCompleto: [],
+            encomendaAtual: null,
+        },
+        methods: {
+            async carregarHistorico() {
+                try {
+                    App.helpers.renderLoadingState(true);
+                    const snapshot = await App.state.database.ref('encomendas').once('value');
+                    
+                    if (!snapshot.exists()) {
+                        App.helpers.renderEmptyState('Nenhum registro no histórico');
+                        return;
                     }
-                });
-            });
-            
-            // Fechar modais com ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-                        toggleModal(modal.id, false);
+                    
+                    const encomendas = [];
+                    snapshot.forEach(child => {
+                        encomendas.push({ id: child.key, ...child.val() });
                     });
+                    
+                    App.state.historicoCompleto = encomendas.sort((a, b) => (b.data || 0) - (a.data || 0));
+                    App.methods.atualizarTabela(App.state.historicoCompleto);
+                    
+                    // FEEDBACK BÔNUS: Confirma que os dados foram carregados ao iniciar
+                    App.helpers.showToast('Histórico carregado!', 'success');
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar histórico:', error);
+                    App.helpers.showToast('Erro ao carregar histórico', 'error');
+                    App.helpers.renderEmptyState('Falha ao carregar dados');
+                } finally {
+                    App.helpers.renderLoadingState(false);
+                    document.getElementById('btnExportarHistorico').style.display = App.state.historicoCompleto.length > 0 ? 'inline-flex' : 'none';
                 }
-            });
-            
-            // Botões de fechar
-            document.querySelectorAll('.modal-close').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const modalId = this.closest('.modal-overlay').id;
-                    toggleModal(modalId, false);
-                });
-            });
-        }
-        
-        function toggleModal(modalId, show) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            
-            if (show) {
-                modal.classList.add('active');
-                // Focar no primeiro elemento interativo do modal
-                const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                if (focusable) focusable.focus();
-            } else {
-                modal.classList.remove('active');
-            }
-        }
-        
-        function setupAccessibility() {
-            // Adiciona labels para elementos interativos
-            document.querySelectorAll('[aria-label]').forEach(el => {
-                if (!el.id) {
-                    el.id = 'label-' + Math.random().toString(36).substr(2, 9);
-                }
-            });
-            
-            // Gerencia foco para acessibilidade
-            document.addEventListener('focus', function(e) {
-                if (e.target.matches('[data-focus-visible-added]')) {
-                    e.target.setAttribute('data-focus-visible-added', 'true');
-                }
-            }, true);
-        }
-        
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast';
-            
-            // Adiciona classe de tipo se necessário
-            if (type === 'error') {
-                toast.style.backgroundColor = 'var(--md-sys-color-error)';
-                toast.style.color = 'var(--md-sys-color-on-error)';
-            } else if (type === 'success') {
-                toast.style.backgroundColor = 'var(--md-sys-color-primary)';
-                toast.style.color = 'var(--md-sys-color-on-primary)';
-            }
-            
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        async function carregarHistorico() {
-            try {
-                // Mostrar estado de carregamento
-                const tabelaHistorico = document.getElementById('tabelaHistorico');
-                tabelaHistorico.innerHTML = `
-                    <tr>
-                        <td colspan="7">
-                            <div class="empty-state">
-                                <span class="loading" aria-hidden="true"></span>
-                                <p>Carregando histórico...</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                
-                // Carrega todas as encomendas (não apenas o histórico)
-                const snapshot = await database.ref('encomendas').once('value');
-                
-                if (!snapshot.exists()) {
-                    tabelaHistorico.innerHTML = `
-                        <tr>
-                            <td colspan="7">
-                                <div class="empty-state">
-                                    <i class="material-icons">history</i>
-                                    <p>Nenhum registro no histórico</p>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+            },
+            atualizarTabela(dados) {
+                const tabelaBody = document.getElementById('tabelaHistorico');
+                if (dados.length === 0) {
+                    // MENSAGEM MELHORADA: Mais específica quando um filtro não retorna nada.
+                    App.helpers.renderEmptyState('Nenhum registro encontrado para os filtros aplicados');
                     return;
                 }
+                tabelaBody.innerHTML = '';
+                dados.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const statusClass = item.status === 'pendente' ? 'status-pendente' : 'status-retirado';
+                    const statusText = item.status === 'pendente' ? 'Pendente' : 'Retirado';
+                    tr.innerHTML = `
+                        <td data-label="Data">${App.helpers.formatarData(item.data)}</td>
+                        <td data-label="Bloco/Apto"><strong>${item.blocoApto || 'N/A'}</strong></td>
+                        <td data-label="Detalhes">${item.quantidade || 0} item(s) - ${item.descricao || 'Sem detalhes'}</td>
+                        <td data-label="Porteiro">${item.registradoPorNome || 'N/A'}</td>
+                        <td data-label="Retirado por">${item.retiradoPorNome || 'N/A'}</td>
+                        <td data-label="Status"><span class="badge ${statusClass}">${statusText}</span></td>
+                        <td data-label="Ações" class="table-actions">
+                            <button class="btn btn-text" data-id="${item.id}" onclick="App.handlers.abrirModalCompartilhar(this)" aria-label="Compartilhar encomenda de ${item.blocoApto}">
+                                <span class="material-icons-outlined">share</span>
+                            </button>
+                        </td>`;
+                    tabelaBody.appendChild(tr);
+                });
+            },
+            aplicarFiltros(event) {
+                event.preventDefault();
+                const filtroBloco = document.getElementById('filtroBloco').value.trim().toLowerCase();
+                const filtroApto = document.getElementById('filtroApto').value.trim().toLowerCase();
                 
-                // Converte para array e processa os dados
-                historicoCompleto = [];
-                snapshot.forEach(child => {
-                    const encomenda = child.val();
-                    historicoCompleto.push({
-                        id: child.key,
-                        data: encomenda.data,
-                        blocoApto: encomenda.blocoApto,
-                        quantidade: encomenda.quantidade,
-                        detalhes: encomenda.descricao || 'Sem detalhes',
-                        porteiroNome: encomenda.registradoPorNome || 'Porteiro',
-                        retiradoPor: encomenda.retiradoPorNome || (encomenda.status === 'retirado' ? 'Morador' : null),
-                        status: encomenda.status,
-                        dataRetirada: encomenda.dataRetirada || null,
-                        porteiroRetirada: encomenda.porteiroRetiradaNome || null
-                    });
+                const dadosFiltrados = App.state.historicoCompleto.filter(item => {
+                    const blocoApto = (item.blocoApto || '').toLowerCase();
+                    return (!filtroBloco || blocoApto.includes(filtroBloco)) && (!filtroApto || blocoApto.includes(filtroApto));
                 });
                 
-                // Ordena por data (mais recente primeiro)
-                historicoCompleto.sort((a, b) => b.data - a.data);
-                atualizarTabela(historicoCompleto);
+                App.methods.atualizarTabela(dadosFiltrados);
                 
-            } catch (error) {
-                console.error('Erro ao carregar histórico:', error);
-                showToast('Erro ao carregar histórico', 'error');
-            }
-        }
-        
-        function atualizarTabela(dados) {
-            const tabelaHistorico = document.getElementById('tabelaHistorico');
-            
-            if (dados.length === 0) {
-                tabelaHistorico.innerHTML = `
-                    <tr>
-                        <td colspan="7">
-                            <div class="empty-state">
-                                <i class="material-icons">search</i>
-                                <p>Nenhum registro encontrado</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            tabelaHistorico.innerHTML = '';
-            dados.forEach(item => {
-                const tr = document.createElement('tr');
-                
-                // Para mobile, adicionamos data-labels
-                tr.innerHTML = `
-                    <td data-label="Data">${formatarData(item.data)}</td>
-                    <td data-label="Bloco/Apto">${item.blocoApto}</td>
-                    <td data-label="Detalhes">
-                        <strong>${item.quantidade} item(s)</strong><br>
-                        ${item.detalhes}
-                    </td>
-                    <td data-label="Porteiro">${item.porteiroNome}</td>
-                    <td data-label="Retirado por">${item.retiradoPor || 'N/A'}</td>
-                    <td data-label="Status">
-                        <span class="badge ${item.status === 'pendente' ? 'error' : 'primary'}">
-                            ${item.status === 'pendente' ? 'Pendente' : 'Retirado'}
-                        </span>
-                    </td>
-                    <td data-label="Ações" class="table-actions">
-                        <button class="btn btn-text" onclick="compartilharEncomenda('${item.id}')" aria-label="Compartilhar encomenda">
-                            <i class="material-icons">share</i>
-                        </button>
-                        <button class="btn btn-text" onclick="exportarItemPDF('${item.id}')" aria-label="Exportar para PDF">
-                            <i class="material-icons">picture_as_pdf</i>
-                        </button>
-                    </td>
-                `;
-                tabelaHistorico.appendChild(tr);
-            });
-        }
-        
-        function formatarData(timestamp) {
-            if (!timestamp) return 'N/A';
-            const date = new Date(timestamp);
-            return date.toLocaleString('pt-BR');
-        }
-        
-        function aplicarFiltros() {
-            const filtroBloco = document.getElementById('filtroBloco').value.toLowerCase();
-            const filtroApto = document.getElementById('filtroApto').value.toLowerCase();
-            
-            const dadosFiltrados = historicoCompleto.filter(item => {
-                const blocoApto = item.blocoApto.toLowerCase();
-                const blocoMatch = !filtroBloco || blocoApto.includes(filtroBloco.toLowerCase());
-                const aptoMatch = !filtroApto || blocoApto.includes(filtroApto.toLowerCase());
-                return blocoMatch && aptoMatch;
-            });
-            
-            atualizarTabela(dadosFiltrados);
-        }
-        
-        function limparFiltros() {
-            document.getElementById('filtroBloco').value = '';
-            document.getElementById('filtroApto').value = '';
-            atualizarTabela(historicoCompleto);
-        }
-        
-        async function limparHistoricoCompleto() {
-            try {
-                // Mostrar estado de carregamento
+                // NOVO FEEDBACK: Avisa o usuário que a busca foi realizada.
+                App.helpers.showToast('Filtro aplicado!', 'success');
+            },
+            limparFiltros(event) {
+                event.preventDefault();
+                document.getElementById('filterForm').reset();
+                App.methods.atualizarTabela(App.state.historicoCompleto);
+
+                // NOVO FEEDBACK: Avisa o usuário que os filtros foram removidos.
+                App.helpers.showToast('Filtros removidos.', 'info');
+            },
+            async limparHistoricoEntregues() {
                 const btn = document.getElementById('btnConfirmarLimparHistorico');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<span class="loading" aria-hidden="true"></span> Processando...';
-                btn.disabled = true;
-                
-                // Primeiro, obtemos todas as encomendas
-                const snapshot = await database.ref('encomendas').once('value');
-                
-                if (!snapshot.exists()) {
-                    showToast('Nenhuma encomenda encontrada', 'info');
-                    return;
-                }
-                
-                // Criamos um array de promessas para deletar as encomendas finalizadas
-                const promises = [];
-                
-                snapshot.forEach(child => {
-                    const encomenda = child.val();
-                    // Verifica se o status é "entregue" ou "finalizada" (ou qualquer status que você considerar como finalizado)
-                    if (encomenda.status === 'retirado' || encomenda.status === 'entregue' || encomenda.status === 'finalizada') {
-                        promises.push(database.ref('encomendas/' + child.key).remove());
+                App.helpers.toggleButtonLoading(btn, true, 'Limpando...'); // Adicionando texto de carregamento
+                try {
+                    const snapshot = await App.state.database.ref('encomendas').orderByChild('status').equalTo('retirado').once('value');
+                    if (!snapshot.exists()) {
+                        App.helpers.showToast('Nenhuma encomenda entregue para limpar.', 'info');
+                        return;
                     }
-                });
-                
-                // Executa todas as promessas
-                await Promise.all(promises);
-                
-                showToast('Encomendas finalizadas removidas com sucesso', 'success');
-                
-                // Recarrega os dados
-                await carregarHistorico();
-                
-                toggleModal('modalLimparHistorico', false);
-                
-            } catch (error) {
-                console.error('Erro ao limpar encomendas finalizadas:', error);
-                showToast('Erro ao limpar encomendas finalizadas', 'error');
-            } finally {
-                const btn = document.getElementById('btnConfirmarLimparHistorico');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                    const updates = {};
+                    snapshot.forEach(child => { updates[child.key] = null; });
+                    await App.state.database.ref('encomendas').update(updates);
+                    App.helpers.showToast('Histórico de entregues limpo!', 'success');
+                    await App.methods.carregarHistorico();
+                    App.helpers.toggleModal('modalLimparHistorico', false);
+                } catch (error) {
+                    App.helpers.showToast('Erro ao limpar histórico.', 'error');
+                } finally {
+                    App.helpers.toggleButtonLoading(btn, false);
+                }
             }
-        }
-        
-        function compartilharEncomenda(id) {
-            encomendaAtual = historicoCompleto.find(item => item.id === id);
-            if (!encomendaAtual) return;
-            
-            // Gera o PDF primeiro
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Título
-            doc.setFontSize(18);
-            doc.text('Detalhes da Encomenda', 105, 15, { align: 'center' });
-            
-            // Data de emissão
-            doc.setFontSize(10);
-            doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 105, 22, { align: 'center' });
-            
-            // Detalhes
-            doc.setFontSize(12);
-            let y = 40;
-            
-            doc.text(`Bloco/Apartamento: ${encomendaAtual.blocoApto}`, 15, y);
-            y += 10;
-            doc.text(`Data do Registro: ${formatarData(encomendaAtual.data)}`, 15, y);
-            y += 10;
-            doc.text(`Quantidade: ${encomendaAtual.quantidade}`, 15, y);
-            y += 10;
-            doc.text(`Registrado por: ${encomendaAtual.porteiroNome}`, 15, y);
-            y += 10;
-            doc.text(`Retirado por: ${encomendaAtual.retiradoPor || 'N/A'}`, 15, y);
-            y += 10;
-            doc.text(`Status: ${encomendaAtual.status === 'pendente' ? 'Pendente' : 'Retirado'}`, 15, y);
-            y += 15;
-            
-            // Detalhes adicionais
-            doc.setFontSize(14);
-            doc.text('Detalhes da Encomenda:', 15, y);
-            y += 10;
-            doc.setFontSize(12);
-            const detalhes = doc.splitTextToSize(encomendaAtual.detalhes || 'Nenhum detalhe adicional fornecido', 180);
-            doc.text(detalhes, 15, y);
-            
-            // Converte para blob
-            const pdfBlob = doc.output('blob');
-            pdfAtual = pdfBlob;
-            
-            // Mostra o modal
-            document.getElementById('detalhesCompartilhar').innerHTML = `
-                <p><strong>Bloco/Apto:</strong> ${encomendaAtual.blocoApto}</p>
-                <p><strong>Data:</strong> ${formatarData(encomendaAtual.data)}</p>
-                <p><strong>Quantidade:</strong> ${encomendaAtual.quantidade}</p>
-                <p><strong>Detalhes:</strong> ${encomendaAtual.detalhes}</p>
-            `;
-            
-            toggleModal('modalCompartilhar', true);
-        }
-
-        // Funções de compartilhamento
-        function compartilharViaWhatsApp() {
-            if (!encomendaAtual) return;
-            
-            const text = `Detalhes da encomenda para ${encomendaAtual.blocoApto}:\n` +
-                         `Data: ${formatarData(encomendaAtual.data)}\n` +
-                         `Quantidade: ${encomendaAtual.quantidade}\n` +
-                         `Detalhes: ${encomendaAtual.detalhes}`;
-            
-            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
-        }
-
-        function compartilharViaTelegram() {
-            if (!encomendaAtual) return;
-            
-            const text = `Detalhes da encomenda para ${encomendaAtual.blocoApto}:\n` +
-                         `Data: ${formatarData(encomendaAtual.data)}\n` +
-                         `Quantidade: ${encomendaAtual.quantidade}\n` +
-                         `Detalhes: ${encomendaAtual.detalhes}`;
-            
-            const url = `https://t.me/share/url?url=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
-        }
-
-        function compartilharViaEmail() {
-            if (!encomendaAtual) return;
-            
-            const subject = `Encomenda para ${encomendaAtual.blocoApto}`;
-            const body = `Detalhes da encomenda:\n\n` +
-                         `Bloco/Apartamento: ${encomendaAtual.blocoApto}\n` +
-                         `Data: ${formatarData(encomendaAtual.data)}\n` +
-                         `Quantidade: ${encomendaAtual.quantidade}\n` +
-                         `Detalhes: ${encomendaAtual.detalhes}`;
-            
-            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
-
-        function compartilharViaOutros() {
-            if (!pdfAtual) return;
-            
-            // Cria um link temporário para o PDF
-            const pdfUrl = URL.createObjectURL(pdfAtual);
-            const fileName = `Encomenda_${encomendaAtual.blocoApto}.pdf`;
-            
-            // Cria um link <a> temporário para download
-            const a = document.createElement('a');
-            a.href = pdfUrl;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            // Libera o objeto URL
-            setTimeout(() => URL.revokeObjectURL(pdfUrl), 100);
-            
-            showToast('PDF pronto para compartilhamento', 'success');
-        }
-        
-        function exportarItemPDF(id) {
-            const encomenda = historicoCompleto.find(item => item.id === id);
-            if (!encomenda) return;
-            
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Título
-            doc.setFontSize(18);
-            doc.text('Detalhes da Encomenda', 105, 15, { align: 'center' });
-            
-            // Data de emissão
-            doc.setFontSize(10);
-            doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 105, 22, { align: 'center' });
-            
-            // Detalhes
-            doc.setFontSize(12);
-            let y = 40;
-            
-            doc.text(`Bloco/Apartamento: ${encomenda.blocoApto}`, 15, y);
-            y += 10;
-            doc.text(`Data do Registro: ${formatarData(encomenda.data)}`, 15, y);
-            y += 10;
-            doc.text(`Quantidade: ${encomenda.quantidade}`, 15, y);
-            y += 10;
-            doc.text(`Registrado por: ${encomenda.porteiroNome}`, 15, y);
-            y += 10;
-            doc.text(`Retirado por: ${encomenda.retiradoPor || 'N/A'}`, 15, y);
-            y += 10;
-            doc.text(`Status: ${encomenda.status === 'pendente' ? 'Pendente' : 'Retirado'}`, 15, y);
-            y += 15;
-            
-            // Detalhes adicionais
-            doc.setFontSize(14);
-            doc.text('Detalhes da Encomenda:', 15, y);
-            y += 10;
-            doc.setFontSize(12);
-            const detalhes = doc.splitTextToSize(encomenda.detalhes || 'Nenhum detalhe adicional fornecido', 180);
-            doc.text(detalhes, 15, y);
-            
-            // Salva o PDF
-            doc.save(`encomenda_${encomenda.blocoApto}_${encomenda.id}.pdf`);
-            showToast('PDF gerado com sucesso', 'success');
-        }
-        
-        async function exportarParaPDF() {
-            try {
-                // Mostrar estado de carregamento
-                const btn = document.getElementById('btnExportarHistorico');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<span class="loading" aria-hidden="true"></span> Gerando...';
-                btn.disabled = true;
-                
+        },
+        helpers: {
+            formatarData(timestamp) {
+                return timestamp ? new Date(timestamp).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'N/A';
+            },
+            toggleModal(modalId, show) {
+                const modal = document.getElementById(modalId);
+                modal.classList.toggle('active', show);
+            },
+            showToast(message, type = 'info') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = `toast show ${type}`;
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+            toggleButtonLoading(button, isLoading, loadingText = '') {
+                button.disabled = isLoading;
+                if (isLoading) {
+                    button.dataset.originalText = button.innerHTML;
+                    const textSpan = loadingText ? `<span style="margin-left: 0.5rem;">${loadingText}</span>` : '';
+                    button.innerHTML = `<span class="loading"></span>${textSpan}`;
+                } else {
+                    button.innerHTML = button.dataset.originalText;
+                }
+            },
+            renderLoadingState(isLoading) {
+                 const tabelaBody = document.getElementById('tabelaHistorico');
+                if (isLoading && tabelaBody.innerHTML === '') {
+                    tabelaBody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span class="loading"></span><p>Buscando registros...</p></div></td></tr>`;
+                }
+            },
+            renderEmptyState(message) {
+                 document.getElementById('tabelaHistorico').innerHTML = `<tr><td colspan="7"><div class="empty-state"><span class="material-icons-outlined">inbox</span><p>${message}</p></div></td></tr>`;
+            },
+            gerarTextoCompartilhamento(encomenda) {
+                return `📦 Detalhes da Encomenda 📦\n\n` +
+                       `Para: ${encomenda.blocoApto}\n` +
+                       `Data de Registro: ${App.helpers.formatarData(encomenda.data)}\n` +
+                       `Quantidade: ${encomenda.quantidade} item(s)\n` +
+                       `Descrição: ${encomenda.descricao || 'N/A'}\n` +
+                       `Status: ${encomenda.status === 'pendente' ? 'Pendente para retirada' : 'Já retirado'}`;
+            },
+            gerarPDF(encomendas, title, filename) {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
-                
-                // Título
                 doc.setFontSize(18);
-                doc.text('Histórico Completo de Encomendas', 105, 15, { align: 'center' });
-                
-                // Data de emissão
-                doc.setFontSize(10);
-                doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 105, 22, { align: 'center' });
-                
-                // Filtros aplicados
-                const filtroBloco = document.getElementById('filtroBloco').value;
-                const filtroApto = document.getElementById('filtroApto').value;
-                
-                if (filtroBloco || filtroApto) {
-                    doc.setFontSize(10);
-                    doc.text(`Filtros aplicados: ${filtroBloco ? 'Bloco: ' + filtroBloco : ''} ${filtroApto ? 'Apto: ' + filtroApto : ''}`, 
-                            105, 30, { align: 'center' });
-                }
-                
-                // Cabeçalho da tabela
-                const headers = [
-                    ['Data', 'Bloco/Apto', 'Quantidade', 'Porteiro', 'Retirado por', 'Status']
-                ];
-                
-                // Dados da tabela
-                const dados = historicoCompleto
-                    .filter(item => {
-                        const blocoApto = item.blocoApto.toLowerCase();
-                        const blocoMatch = !filtroBloco || blocoApto.includes(filtroBloco.toLowerCase());
-                        const aptoMatch = !filtroApto || blocoApto.includes(filtroApto.toLowerCase());
-                        return blocoMatch && aptoMatch;
-                    })
-                    .map(item => [
-                        formatarData(item.data),
-                        item.blocoApto,
-                        item.quantidade.toString(),
-                        item.porteiroNome,
-                        item.retiradoPor || 'N/A',
-                        item.status === 'pendente' ? 'Pendente' : 'Retirado'
-                    ]);
-                
-                // Configurações da tabela
-                const tableConfig = {
-                    startY: 40,
-                    head: headers,
-                    body: dados,
-                    theme: 'grid',
-                    headStyles: {
-                        fillColor: [103, 80, 164], // Cor primária MD3
-                        textColor: 255,
-                        fontStyle: 'bold'
-                    },
-                    alternateRowStyles: {
-                        fillColor: [245, 245, 245]
-                    },
-                    margin: { top: 40 }
-                };
-                
-                // Adiciona a tabela
-                doc.autoTable(tableConfig);
-                
-                // Salva o PDF
-                doc.save('historico_encomendas.pdf');
-                showToast('PDF gerado com sucesso', 'success');
-                
-            } catch (error) {
-                console.error('Erro ao exportar para PDF:', error);
-                showToast('Erro ao gerar PDF', 'error');
-            } finally {
-                const btn = document.getElementById('btnExportarHistorico');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                doc.text(title, 14, 22);
+                const head = [['Data', 'Bloco/Apto', 'Qtd', 'Porteiro', 'Retirado por', 'Status']];
+                const body = encomendas.map(item => [ App.helpers.formatarData(item.data), item.blocoApto, item.quantidade, item.registradoPorNome || 'N/A', item.retiradoPorNome || 'N/A', item.status === 'pendente' ? 'Pendente' : 'Retirado' ]);
+                doc.autoTable({ startY: 30, head, body, theme: 'grid', headStyles: { fillColor: [79, 70, 229] } });
+                doc.save(filename);
             }
+        },
+        handlers: {
+            abrirModalCompartilhar(button) {
+                const id = button.dataset.id;
+                App.state.encomendaAtual = App.state.historicoCompleto.find(item => item.id === id);
+                if (!App.state.encomendaAtual) return;
+                document.getElementById('detalhesCompartilhar').innerHTML = `<p><strong>Para:</strong> ${App.state.encomendaAtual.blocoApto}<br><strong>Data:</strong> ${App.helpers.formatarData(App.state.encomendaAtual.data)}</p>`;
+                App.helpers.toggleModal('modalCompartilhar', true);
+            },
+            compartilhar(event) {
+                const action = event.currentTarget.dataset.share;
+                const encomenda = App.state.encomendaAtual;
+                if (!encomenda) return;
+                const texto = App.helpers.gerarTextoCompartilhamento(encomenda);
+                switch(action) {
+                    case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank'); break;
+                    case 'email': window.location.href = `mailto:?subject=Detalhes da Encomenda - ${encomenda.blocoApto}&body=${encodeURIComponent(texto)}`; break;
+                    case 'copy': navigator.clipboard.writeText(texto).then(() => App.helpers.showToast('Texto copiado!', 'success')).catch(() => App.helpers.showToast('Falha ao copiar.', 'error')); break;
+                    case 'pdf': App.helpers.gerarPDF([encomenda], `Detalhes da Encomenda`, `encomenda_${encomenda.blocoApto}.pdf`); break;
+                }
+            },
+            exportarTabelaCompleta() {
+                const btn = document.getElementById('btnExportarHistorico');
+                App.helpers.toggleButtonLoading(btn, true, 'Gerando...');
+                try {
+                    const form = document.getElementById('filterForm');
+                    const formData = new FormData(form);
+                    const filtroBloco = formData.get('filtroBloco')?.trim().toLowerCase() ?? '';
+                    const filtroApto = formData.get('filtroApto')?.trim().toLowerCase() ?? '';
+                    const dadosFiltrados = App.state.historicoCompleto.filter(item => {
+                         const blocoApto = (item.blocoApto || '').toLowerCase();
+                         return (!filtroBloco || blocoApto.includes(filtroBloco)) && (!filtroApto || blocoApto.includes(filtroApto));
+                    });
+                    App.helpers.gerarPDF(dadosFiltrados, 'Histórico de Encomendas', 'historico_encomendas.pdf');
+                } catch(e) {
+                    App.helpers.showToast('Erro ao gerar o PDF.', 'error');
+                } finally {
+                    App.helpers.toggleButtonLoading(btn, false);
+                }
+            }
+        },
+        init() {
+            firebase.initializeApp(App.state.firebaseConfig);
+            App.state.database = firebase.database();
+            document.addEventListener('DOMContentLoaded', () => {
+                App.methods.carregarHistorico();
+                document.getElementById('btnLimparHistorico').addEventListener('click', () => App.helpers.toggleModal('modalLimparHistorico', true));
+                document.getElementById('btnConfirmarLimparHistorico').addEventListener('click', App.methods.limparHistoricoEntregues);
+                document.getElementById('btnExportarHistorico').addEventListener('click', App.handlers.exportarTabelaCompleta);
+                document.getElementById('filterForm').addEventListener('submit', App.methods.aplicarFiltros);
+                document.getElementById('filterForm').addEventListener('reset', App.methods.limparFiltros);
+                document.querySelectorAll('.modal-overlay').forEach(modal => {
+                    modal.addEventListener('click', (e) => { if (e.target === modal) App.helpers.toggleModal(modal.id, false); });
+                });
+                document.querySelectorAll('.modal-close').forEach(btn => {
+                    btn.addEventListener('click', () => App.helpers.toggleModal(btn.closest('.modal-overlay').id, false));
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.modal-overlay.active').forEach(modal => App.helpers.toggleModal(modal.id, false));
+                    }
+                });
+                document.querySelectorAll('.share-option').forEach(btn => {
+                    btn.addEventListener('click', App.handlers.compartilhar);
+                });
+            });
         }
+    };
+    App.init();
     </script>
+
 </body>
 </html>
-
